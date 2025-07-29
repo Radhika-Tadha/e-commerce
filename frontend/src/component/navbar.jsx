@@ -12,7 +12,7 @@ export default function Navbar({ user, setUser }) {
 
     const handleLogout = async () => {
         try {
-            const res = await axios.post("http://localhost:8000/api/user/logout", {}, {
+            const res = await axios.post("http://localhost:8000/api/auth/logout", {}, {
                 withCredentials: true,
             });
             setUser(null);
@@ -66,7 +66,16 @@ export default function Navbar({ user, setUser }) {
                             </button>
                             <ul className="dropdown-menu dropdown-menu-end">
                                 <li><Link className="dropdown-item" to="#">Profile</Link></li>
-                                <li><Link className="dropdown-item" to="#">Orders</Link></li>
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        data-bs-toggle="offcanvas"
+                                        data-bs-target="#myOrdersPanel"
+                                        type="button"
+                                    >
+                                        Orders
+                                    </button>
+                                </li>
                                 <li><Link className="dropdown-item" onClick={handleLogout} to="#">Logout</Link></li>
                                 <li><Link className="dropdown-item" to="Signup">Signup</Link></li>
                                 <li><Link className="dropdown-item" to="Login">Login</Link></li>
@@ -76,23 +85,28 @@ export default function Navbar({ user, setUser }) {
                         </div>
 
                         {/* Cart Icon */}
-                        <div className="cart" onClick={handleCartClick} >
-                            <div className="cart-icon">
-                                <Link to="/cart" className="position-relative me-3">
-                                    <i className="bi bi-cart-plus fs-4"></i>
+                        {user?.role === "user" && (
+                            <>
+                                <div className="cart" onClick={handleCartClick} >
+                                    <div className="cart-icon">
+                                        <Link to="/cart" className="position-relative me-3">
+                                            <i className="bi bi-cart-plus fs-4"></i>
 
-                                    {totalQty > 0 && (
-                                        <span
-                                            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                            style={{ fontSize: "0.7rem" }}
-                                        >
-                                            {totalQty}
-                                        </span>
-                                    )}
-                                </Link>                            </div>
-
-                        </div>
+                                            {totalQty > 0 && (
+                                                <span
+                                                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                    style={{ fontSize: "0.7rem" }}
+                                                >
+                                                    {totalQty}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
+
 
                 </div>
             </nav>
@@ -132,10 +146,10 @@ export default function Navbar({ user, setUser }) {
                                     </li>
 
                                     <li className="nav-item nav-hover">
-                                        <Link className="nav-link active " aria-current="page" to="/Home">Orders</Link>
+                                        <Link className="nav-link active " aria-current="page" to="/Order">Orders</Link>
                                     </li>
                                     <li className="nav-item nav-hover">
-                                        <Link className="nav-link active " aria-current="page" to="/Home">Users</Link>
+                                        <Link className="nav-link active " aria-current="page" to="/FetchUser">Users</Link>
                                     </li>
                                     <li className="nav-item nav-hover">
                                         <Link className="nav-link" to="/AddProduct">AddProduct</Link>

@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
 const initialState = {
-  cartItems: [],
+  cartItems: storedCartItems,
 };
 
 const cartSlice = createSlice({
@@ -23,8 +25,12 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.cartItems = [];
     },
+    // new reducer to restore cart from localStorage on refresh
+    setCart(state, action) {
+      state.cartItems = action.payload;
+    }
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, setCart } = cartSlice.actions;
 export default cartSlice.reducer;

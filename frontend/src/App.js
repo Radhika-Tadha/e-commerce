@@ -1,25 +1,50 @@
 import './App.css';
+import axios from 'axios';
+import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
+import { setCart } from "./redux/cartSlice"; // update path if different
+
+
 import Navbar from './component/navbar';
 import Footer from './component/footer';
-import { Routes, Route } from 'react-router-dom';
+
+import AddProduct from './Admin/Pages/AddProduct';
+import ProductPage from './Admin/Pages/ProductPage';
+import Order from './Admin/Pages/Order';
+import FetchUser from './Admin/Pages/FetchUser';
+
 import Home from './Pages/Home';
 import SignUp from './Pages/Signup';
 import Login from './Pages/Login';
-import AddProduct from './Admin/Pages/AddProduct';
-import ProductPage from './Admin/Pages/ProductPage';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import ProductEditWrapper from './Pages/ProductEditWrapper';
 import AllProducts from './Pages/AllProduct';
 import ContactUs from './Pages/ContactUs';
 import ProductDetail from './Pages/ProductDetail';
 import Cart from './Pages/Cart';
+import CheckoutPage from './Pages/CheckoutPage';
+import MyOrders from './Pages/MyOrder';
 // import SignUp from './Pages/Signup.jsx';
 // import About from './pages/About';
 
 function App() {
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
+  // 1️⃣ Load cart from localStorage on first load
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cartItems");
+    if (storedCart) {
+      dispatch(setCart(JSON.parse(storedCart)));
+    }
+  }, []); // Only once on page load
+
+  // 2️⃣ Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   useEffect(() => {
     axios.get("http://localhost:8000/api/user/getUser", {
@@ -46,9 +71,16 @@ function App() {
           <Route path="/ProductPage" element={<ProductPage />} />
           <Route path="/update/:id" element={<ProductEditWrapper />} />
           <Route path="/allproduct" element={<AllProducts />} />
-          <Route path="/ContactUs" element={<ContactUs/>}/>
-          <Route path="/product/:id" element={<ProductDetail/>}/>
-          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/ContactUs" element={<ContactUs />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/Order" element={<Order />} />
+          <Route path="/checkout/:id" element={<CheckoutPage />} />
+          <Route path="/fetchuser" element={<FetchUser />} />
+          <Route path="/myorder" element={<MyOrders/>} />
+
+
+
 
 
 

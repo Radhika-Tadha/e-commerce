@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProductDetail() {
     const { id } = useParams();
+    const [user, setUser] = useState(null);
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [redirectToCart, setRedirectToCart] = useState(false); // <-- step 1
@@ -27,6 +28,38 @@ export default function ProductDetail() {
     const handleAddToCart = () => {
         dispatch(addToCart({ ...product, quantity }));
     };
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/user/getUser", {
+            withCredentials: true
+        })
+            .then((res) => setUser(res.data.user))
+            .catch((err) => console.log("User fetch failed", err));
+    }, []);
+    const handleBuyNow = () => {
+        if (!user) {
+            alert("Please log in first to buy the product.");
+            navigate("/login");
+            return;
+        }
+
+        const isConfirmed = window.confirm("Are you sure you want to order this product?");
+        if (!isConfirmed) return;
+
+        // Save necessary data to localStorage or Redux (your choice)
+        const quantity = parseInt(localStorage.getItem("quantity"), 10) || 1;
+
+        localStorage.setItem("checkout_product", JSON.stringify({
+            productId: product._id,
+            title: product.title,
+            price: product.price,
+            // address: order.address,
+            quantity,
+        }));
+
+        // Redirect to multi-step checkout page
+        navigate(`/checkout/${product._id}`);
+    };
+
 
     useEffect(() => {
         if (redirectToCart) {
@@ -73,7 +106,7 @@ export default function ProductDetail() {
                             src={`http://localhost:8000/uploads/${product.image}`}
                             alt={product.name}
                             className="img-fluid "
-                            style={{ maxHeight: "100%", objectFit: "cover", maxWidth: "100%" }}
+                            style={{ maxHeight: "90%", objectFit: "cover", maxWidth: "100%" }}
                         />
                     </div>
                     <div className="col-sm-6">
@@ -111,7 +144,7 @@ export default function ProductDetail() {
 
                         <div className="row mt-3">
                             <button type="button" className="btn custom-readmore rounded-0 col-sm-3 mx-2" onClick={handleAddToCart}>ADD TO CART</button>
-                            <button type="button" className="btn custom-readmore rounded-0 col-sm-3 mx-2">BUY NOW</button>
+                            <button type="button" className="btn custom-readmore rounded-0 col-sm-3 mx-2" onClick={handleBuyNow}>BUY NOW</button>
                         </div>
                         <hr />
                         <p className="text-muted">Category: {product.category}</p>

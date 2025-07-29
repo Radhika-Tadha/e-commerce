@@ -15,12 +15,9 @@ export default function Profile() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            // const token = localStorage.getItem("token");
-            // console.log("Token:",token);
             try {
                 const res = await axios.get("http://localhost:8000/api/auth/me", {
                     headers: {
-                        // Authorization: `Bearer ${token}`,
                         withCredentials: true,
                     },
                 });
@@ -41,7 +38,7 @@ export default function Profile() {
     }
     const imageUrl = user.image
         ? `http://localhost:8000/uploads/${user.image}` // ✅ Adjust based on your multer storage path
-        : {Default};
+        : { Default };
 
     return (
         <div className="container vh-100 d-flex align-items-center justify-content-center mt-1">
@@ -66,7 +63,7 @@ export default function Profile() {
 
                 {/* RIGHT SIDE - FORM */}<br></br>
                 <div className="col-md-8 p-5 bg-white rounded-end "><br></br>
-                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none"style={{color:"#BB5A3A"}}>Information</h3>
+                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none" style={{ color: "#BB5A3A" }}>Information</h3>
                     <div className='row'>
                         <div className="col-sm-6 text-start text-muted border-0 border-bottom rounded-0 shadow-none">
                             <p className="mt-5 mb-0"><strong>Email: </strong>{user.email}</p>

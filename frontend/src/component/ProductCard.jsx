@@ -11,7 +11,7 @@ export default function ProductCard({ product }) {
     };
 
     return (
-        <div className="card border-0" style={{ width: "19rem", height: "30rem", cursor: "pointer", borderRadius: "none" }} onClick={handleClick}>
+        <div className="card border-0" style={{ width: "17rem", height: "32rem", cursor: "pointer", borderRadius: "none" }} onClick={handleClick}>
             <img
                 src={`http://localhost:8000/uploads/${product.image}`} // assuming backend serves image from /uploads
                 className="card-img-top bi-r-square-fill"

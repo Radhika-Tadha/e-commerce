@@ -11,7 +11,7 @@ export default function ProductPage() {
     const fetchProduct = async () => {
       try {
         const res = await axios.get(`http://localhost:8000/api/product/allproduct?role=admin`);
-        console.log("Fetched products:", res.data);
+        // console.log("Fetched products:", res.data);
         setProducts(res.data.product);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -54,7 +54,7 @@ export default function ProductPage() {
       </div> */}
       <h2 className="mb-4">Product Details</h2>
       <table className="table table-bordered table-striped">
-        <thead>
+        <thead className="table-primary">
           <tr>
             <th>Image</th>
             <th>Name</th>

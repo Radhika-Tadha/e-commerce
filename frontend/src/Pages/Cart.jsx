@@ -1,9 +1,10 @@
-// src/Pages/Cart.jsx
 import React from "react";
+import { useNavigate} from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, clearCart } from "../redux/cartSlice";
 
 export default function Cart() {
+    const navigate = useNavigate();
     const cartItems = useSelector((state) => state.cart.cartItems);
     const dispatch = useDispatch();
 
@@ -11,14 +12,12 @@ export default function Cart() {
         (acc, item) => acc + item.price * item.quantity,
         0
     );
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    const handleRemove = (id) => {
-        dispatch(removeFromCart(id));
-    };
 
     const handleClear = () => {
         dispatch(clearCart());
+    };
+    const goTo = (productId) => {
+        navigate(`/product/${productId}`);
     };
 
     return (
@@ -28,7 +27,7 @@ export default function Cart() {
                 <>
                     {cartItems.map((item) => (
                         <div key={item._id} className="row my-3 border-bottom pb-3">
-                            <div className="col-sm-2">
+                            <div className="col-sm-2" onClick={() => goTo(item._id)} >
                                 <img
                                     src={`http://localhost:8000/uploads/${item.image}`}
                                     alt={item.name}
@@ -45,10 +44,10 @@ export default function Cart() {
                             <div className="col-sm-2">
                                 <p>₹{item.price} x {item.quantity} = ₹{item.price * item.quantity}</p>
                             </div>
-                            
+
                         </div>
                     ))}
-                
+
                     <div className="mt-4">
                         <h4>Total: ₹{totalPrice}</h4>
                         <button className="btn btn-warning" onClick={handleClear}>Clear Cart</button>

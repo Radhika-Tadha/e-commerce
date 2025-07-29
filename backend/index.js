@@ -1,43 +1,56 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // connect with froentend
+const cors = require('cors');
 const dotenv = require('dotenv');
-dotenv.config();
-
-const app = express();
 const cookieParser = require('cookie-parser');
+
+dotenv.config();
+const app = express();
+
+//  Middleware
 app.use(cors({
-    origin: "http://localhost:3000", // your React app origin
-    credentials: true
+    origin: "http://localhost:3000",
+    credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
 app.use("/uploads", express.static("uploads"));
 
+//  Route Imports
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
+const orderRoutes = require("./routes/order");
+const adminRoutes = require("./routes/admin"); 
+const authRoutes = require("./routes/auth");
+
+//  Test Route
 app.get('/api/test', (req, res) => {
-    res.send('✅ Backend working');
+    res.send('Backend working');
 });
 
+//  API Routes
 app.use("/api/user", userRoutes);
 app.use("/api/product", productRoutes);
+app.use("/api/order", orderRoutes);
+app.use("/api/admin", adminRoutes); 
+app.use("/api/auth", authRoutes);
 
+//  Global Error Handler
 app.use((err, req, res, next) => {
     console.error("Global error:", err);
     res.status(500).json({ message: "Server crashed...." });
 });
 
+//  MongoDB Connection
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-    .then(() => console.log("Connection Successfull"))
-    .catch(err => console.error("Connection failed", err.message));
+    .then(() => console.log(" MongoDB Connected"))
+    .catch(err => console.error(" MongoDB Connection Failed:", err.message));
 
-
+//  Start Server
 app.listen(8000, () => {
     console.log("Server running on http://localhost:8000");
 });

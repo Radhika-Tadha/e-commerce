@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const navigator = useNavigate();
-    const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const [form, setForm] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
@@ -20,9 +20,11 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8000/api/user/login", form,{
+            const res = await axios.post("http://localhost:8000/api/auth/login", form,{
                 withCredentials:true,
             });
+            console.log("Sending login form:", form);
+
             alert(res.data.message);
             navigator("/home");
 
@@ -57,7 +59,6 @@ export default function Login() {
                                         <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
                                     </span>
                                 </div>
-
                                 <div className="form-check text-start">
                                     <input className="form-check-input" style={{ color: "red" }} type="checkbox" value="" id="checkChecked" />
                                     <label className="form-check-label" htmlFor="checkChecked">Remember Me</label>
@@ -65,11 +66,9 @@ export default function Login() {
                                 <br></br>
                                 <button type="submit" className="btn btn-danger w-100">Login</button>
                             </form>
-                           
                         </div>
                     </div>
                 </div>
-
             </>
         </div>
     )
