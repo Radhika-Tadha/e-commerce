@@ -45,25 +45,33 @@ export default function ProductDetail() {
         const isConfirmed = window.confirm("Are you sure you want to order this product?");
         if (!isConfirmed) return;
 
-        // Save necessary data to localStorage or Redux (your choice)
-        const quantity = parseInt(localStorage.getItem("quantity"), 10) || 1;
+        // Save necessary data to localStorage or Redux
+        // const quantity = parseInt(localStorage.getItem("quantity"), 10) || 1;
+        console.log("Buying product with quantity:", quantity);
 
         localStorage.setItem("checkout_product", JSON.stringify({
             productId: product._id,
             title: product.title,
             price: product.price,
             // address: order.address,
-            quantity,
+            quantity: quantity,
         }));
+        console.log("Buying product with quantity:", quantity);
 
-        // Redirect to multi-step checkout page
+        console.log("Storing to localStorage:", {
+            productId: product._id,
+            title: product.title,
+            price: product.price,
+            quantity,
+        });
+
         navigate(`/checkout/${product._id}`);
     };
 
 
     useEffect(() => {
         if (redirectToCart) {
-            navigate('/cart'); // <-- step 3: safe navigation
+            navigate('/cart'); // <-- step 3: navigate
         }
     }, [redirectToCart, navigate]);
 

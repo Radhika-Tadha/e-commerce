@@ -37,7 +37,7 @@ export default function Profile() {
         return <h3 className="text-center mt-5">Please login to view profile.</h3>;
     }
     const imageUrl = user.image
-        ? `http://localhost:8000/uploads/${user.image}` // ✅ Adjust based on your multer storage path
+        ? `http://localhost:8000/uploads/${user.image}` 
         : { Default };
 
     return (

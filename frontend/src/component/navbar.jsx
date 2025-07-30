@@ -6,25 +6,41 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 export default function Navbar({ user, setUser }) {
+    // const [products, setProducts] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
     const cartItems = useSelector((state) => state.cart.cartItems || []);
     const totalQty = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-    const handleLogout = async () => {
-        try {
-            const res = await axios.post("http://localhost:8000/api/auth/logout", {}, {
-                withCredentials: true,
-            });
-            setUser(null);
-            window.location.href = "/home";
-        } catch (err) {
-            console.error("logout fail...", err);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim() !== "") {
+            navigate(`/AllProduct?search=${encodeURIComponent(searchTerm)}`);
+        } else {
+            navigate('/AllProduct');
+        }
+    };
 
+
+    const handleLogout = async () => {
+        if (window.confirm("Are you sure to Logout this site?")) {
+            try {
+                const res = await axios.post("http://localhost:8000/api/auth/logout", {}, {
+                    withCredentials: true,
+                });
+                setUser(null);
+                alert("logout succesfully");
+                window.location.href = "/home";
+            } catch (err) {
+                console.error("logout fail...", err);
+            }
         }
     }
     const handleCartClick = () => {
-        navigate("/cart"); // ✅ Redirect to cart page
+        navigate("/cart"); //  Redirect to cart page
     };
+
     return (
         <>
             <nav className="navbar navbar-expand-lg p-2 d-flex" style={{ backgroundColor: "white" }}>
@@ -35,7 +51,7 @@ export default function Navbar({ user, setUser }) {
                     </button>
                     <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
 
-                        <form className="d-flex"> {/* onSubmit={handleSearch}> */}
+                        <form className="d-flex" onSubmit={handleSearch}>
                             <div className="input-group" >
                                 <span className="input-group-text">
                                     <i className="bi bi-search"></i>
@@ -45,8 +61,8 @@ export default function Navbar({ user, setUser }) {
                                     className="form-control"
                                     placeholder="Search"
                                     aria-label="Search"
-                                // value={searchTerm}
-                                // onChange={(e) => setSearchTerm(e.target.value)}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
                         </form>
@@ -65,17 +81,13 @@ export default function Navbar({ user, setUser }) {
                                 <i className="bi bi-person-circle fs-4"></i>
                             </button>
                             <ul className="dropdown-menu dropdown-menu-end">
-                                <li><Link className="dropdown-item" to="#">Profile</Link></li>
+                                <li><Link className="dropdown-item" to="/Profile">Profile</Link></li>
                                 <li>
-                                    <button
-                                        className="dropdown-item"
-                                        data-bs-toggle="offcanvas"
-                                        data-bs-target="#myOrdersPanel"
-                                        type="button"
-                                    >
+                                    <Link to="/MyOrders" className="dropdown-item">
                                         Orders
-                                    </button>
+                                    </Link>
                                 </li>
+
                                 <li><Link className="dropdown-item" onClick={handleLogout} to="#">Logout</Link></li>
                                 <li><Link className="dropdown-item" to="Signup">Signup</Link></li>
                                 <li><Link className="dropdown-item" to="Login">Login</Link></li>
@@ -130,7 +142,7 @@ export default function Navbar({ user, setUser }) {
                                         <Link className="nav-link" to="/AllProduct">Shop Now</Link>
                                     </li>
                                     <li className="nav-item nav-hover">
-                                        <Link className="nav-link" to="/">AboutUs</Link>
+                                        <Link className="nav-link" to="/AboutUs">AboutUs</Link>
                                     </li>
 
                                     <li className="nav-item nav-hover">

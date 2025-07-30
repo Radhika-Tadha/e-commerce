@@ -1,4 +1,3 @@
-// redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import cartReducer from "./cartSlice";
 
@@ -8,4 +7,4 @@ const store = configureStore({
   },
 });
 
-export default store; // ✅ This fixes the import error
+export default store; 

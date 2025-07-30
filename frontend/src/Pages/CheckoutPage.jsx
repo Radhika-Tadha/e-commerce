@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useDispatch } from "react-redux";
 import axios from "axios";
 
 
@@ -11,9 +10,8 @@ export default function CheckoutPage() {
   const [step, setStep] = useState(0);
   const [address, setAddress] = useState("");
   const [product, setProduct] = useState(null);
+  // const [order, setOrder] = useState([]);
   const [quantity, setQuantity] = useState(null);
-  // const dispatch = useDispatch();
-
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handleBack = () => setStep((prev) => prev - 1);
@@ -47,48 +45,39 @@ export default function CheckoutPage() {
     }
   };
   useEffect(() => {
-  const fetchUserAndProduct = async () => {
-    try {
-      const [userRes, productRes] = await Promise.all([
-        axios.get("http://localhost:8000/api/user/getUser", { withCredentials: true }),
-        axios.get(`http://localhost:8000/api/product/${id}`)
-      ]);
+    const fetchUserAndProduct = async () => {
+      try {
+        const [userRes, productRes] = await Promise.all([
+          axios.get("http://localhost:8000/api/user/getUser", { withCredentials: true }),
+          axios.get(`http://localhost:8000/api/product/${id}`),
+          axios.get("http://localhost:8000/api/order/my-orders", { withCredentials: true })
+        ]);
+        console.log("qut..",quantity);
+        setUser(userRes.data.user);
+        setProduct(productRes.data.product);
 
-      setUser(userRes.data.user);
-      setProduct(productRes.data.product);
+        // Load quantity from checkout_product
+        const stored = JSON.parse(localStorage.getItem("checkout_product"));
+        if (stored?.quantity) {
+          setQuantity(stored.quantity);
+        } else {
+          setQuantity(1); // fallback if quantity is not found
+        }
 
-      // Load quantity from buyNow
-      const stored = JSON.parse(localStorage.getItem("checkout_product"));
-      if (stored?.quantity) {
-        setQuantity(stored.quantity);
-      } else {
-        setQuantity(1); // fallback if quantity is not found
+      } catch (err) {
+        console.error("Failed to load data", err);
       }
+    };
 
-    } catch (err) {
-      console.error("Failed to load data", err);
-    }
-  };
-
-  fetchUserAndProduct();
-}, [id]);
-
-      // console.log("qut:..", stored.quantity);
-  // useEffect(() => {
-  //   const item = JSON.parse(localStorage.getItem("checkout_product"));
-  //   if (item?.quantity) {
-  //     setQuantity(item.quantity);
-  //     console.log("qut:..", stored.quantity);
-  //   }
-  // }, []);
-
+    fetchUserAndProduct();
+  }, [id]);
 
   if (!user || !product) {
     return <p className="text-center mt-5">Loading...</p>;
   }
   return (
     <div className="container mt-5">
-      {/* Stepper UI */}
+      {/* Step per UI */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         {steps.map((label, index) => (
           <div key={index} className="text-center" style={{ flex: 1 }}>
@@ -140,7 +129,6 @@ export default function CheckoutPage() {
         <div>
           <h4>Confirm Order</h4>
 
-          {/* Simulate items — replace with your actual cart or order product */}
           <ul className="list-group">
             <li className="list-group-item">Product: {product.category}</li>
             <li className="list-group-item">Product: {product.name}</li>
@@ -187,3 +175,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+

@@ -10,7 +10,7 @@ export default function FetchUser() {
         const res = await axios.get("http://localhost:8000/api/user/all", {
           withCredentials: true,
         });
-        setUsers(res.data.users); // ✅ backend must return { users: [...] }
+        setUsers(res.data.users); 
       } catch (err) {
         console.error("Failed to fetch users:", err);
       }

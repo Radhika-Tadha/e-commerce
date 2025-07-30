@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const fs = require("fs");
 const path = require("path");
+const product = require("../models/product");
 
 exports.insertProduct = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ exports.insertProduct = async (req, res) => {
     res.status(201).json({ message: "Product created", product: newProduct });
 
   } catch (err) {
-    console.error("❌ Insert product error:", err);
+    console.error(" Insert product error:", err);
     res.status(500).json({ message: "Internal server error", error: err.message });
   }
 };
@@ -97,16 +98,28 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-exports.searchByCategory = async (req, res) => {
+
+exports.getProducts = async (req, res) => {
   const search = req.query.search || "";
+  const category = req.query.category || "";
+
+  const filter = {};
+
+  if (category) {
+    // partial, case-insensitive match on category
+    filter.category = { $regex: `^${category}$`, $options: "i" };
+  }
+
+  if (search) {
+    // partial, case-insensitive match on name
+    filter.name = { $regex: search, $options: "i" };
+  }
 
   try {
-    const products = await Product.find({
-      category: { $regex: search, $options: "i" }
-    });
-
+    const products = await Product.find(filter);
     res.status(200).json({ product: products });
   } catch (err) {
     res.status(500).json({ error: "Server error", details: err.message });
   }
 };
+

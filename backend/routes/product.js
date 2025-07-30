@@ -10,14 +10,17 @@ const {
   getAllProducts,
   getProductById,
   searchByCategory,
+  getProducts,
 } = require("../controllers/productController");
 
 // Routes
+router.get('/allProduct', getProducts);
 router.post("/insert", authMiddleware, upload.single("image"), insertProduct);
 router.put("/update/:id", upload.single("image"), updateProduct);
 router.delete("/:id", authMiddleware, deleteProduct);
-router.get("/allproduct", getAllProducts);
+// router.get("/allproduct", getAllProducts);
 router.get("/:id", getProductById);
-router.get("/", searchByCategory);
+// router.get("/", searchByCategory);
+
 
 module.exports = router;

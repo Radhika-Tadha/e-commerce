@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../component/ProductCard";
 import { Link } from 'react-router-dom';
-import axios from "axios"; // or import custom axios instance
+import axios from "axios"; 
 
 export default function Categorycard() {
     const [products, setProducts] = useState([]);

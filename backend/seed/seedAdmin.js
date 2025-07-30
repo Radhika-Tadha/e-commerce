@@ -8,9 +8,9 @@ dotenv.config();
 
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => console.log("✅ DB connected"))
+  .then(() => console.log(" DB connected"))
   .catch((err) => {
-    console.error("❌ DB connection failed", err);
+    console.error(" DB connection failed", err);
     process.exit(1);
   });
 
@@ -18,7 +18,7 @@ async function seedAdmin() {
   try {
     const existingAdmin = await User.findOne({ email: "admin@gmail.com" });
     if (existingAdmin) {
-      console.log("⚠️ Admin already exists");
+      console.log(" Admin already exists");
       return process.exit(0);
     }
 
@@ -31,10 +31,10 @@ async function seedAdmin() {
     });
 
     await admin.save();
-    console.log("✅ Admin user seeded successfully");
+    console.log(" Admin user seeded successfully");
     process.exit(0);
   } catch (err) {
-    console.error("❌ Error seeding admin", err);
+    console.error(" Error seeding admin", err);
     process.exit(1);
   }
 }

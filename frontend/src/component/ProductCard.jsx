@@ -5,15 +5,15 @@ export default function ProductCard({ product }) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/product/${product._id}`); // adjust path as per your routing
-        // navigate("/ProductDetail"); // adjust path as per your routing
+        navigate(`/product/${product._id}`); // adjust path as per routing
+        // navigate("/ProductDetail"); // adjust path as per routing
 
     };
 
     return (
         <div className="card border-0" style={{ width: "17rem", height: "32rem", cursor: "pointer", borderRadius: "none" }} onClick={handleClick}>
             <img
-                src={`http://localhost:8000/uploads/${product.image}`} // assuming backend serves image from /uploads
+                src={`http://localhost:8000/uploads/${product.image}`}
                 className="card-img-top bi-r-square-fill"
                 alt={product.name}
                 style={{ height: "400px", objectFit: "cover" }}

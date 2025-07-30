@@ -19,7 +19,6 @@ export default function ContactUs() {
     e.preventDefault();
     console.log("Contact form submitted:", formData);
     alert("Thank you for contacting us!");
-    // Optionally: send data to backend here
     setFormData({ name: "", email: "", message: "" });
   };
 
@@ -71,7 +70,6 @@ export default function ContactUs() {
                   value={formData.name}
                   onChange={handleChange}
                   className="form-control rounded-0 shadow-none text-start"
-                  // placeholder="Your Name"
                   required
                 />
               </div>
@@ -83,7 +81,6 @@ export default function ContactUs() {
                   value={formData.email}
                   onChange={handleChange}
                   className="form-control rounded-0 shadow-none text-start"
-                  // placeholder="you@example.com"
                   required
                 />
               </div>
@@ -95,7 +92,6 @@ export default function ContactUs() {
                   onChange={handleChange}
                   className="form-control rounded-0 shadow-none text-start"
                   rows="3"
-                  // placeholder="Type your message here..."
                   required
                 />
               </div>

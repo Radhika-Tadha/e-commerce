@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import ProductCard from "../component/ProductCard";
 import axios from "axios";
 
-// ✅ Correct useQuery function
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
@@ -13,30 +12,51 @@ export default function AllProducts({ limit }) {
     const query = useQuery();
     const [products, setProducts] = useState([]);
     const CategoryTerm = query.get("category")?.toLowerCase();
+    const search = query.get("search") || "";
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const url = CategoryTerm
-                    ? `http://localhost:8000/api/product/allProduct?category=${CategoryTerm}`
-                    : `http://localhost:8000/api/product/allProduct`;
-                const res = await axios.get(url, { withCredentials: true });
-                
-                setProducts(res.data.product); // make sure your backend returns { product: [...] }
+                const res = await axios.get("http://localhost:8000/api/product/allProduct", {
+                    params: {
+                        category: CategoryTerm,
+                        search,
+                    },
+                    withCredentials: true,
+                });
+
+                setProducts(res.data.product);
             } catch (err) {
                 console.error("Error fetching products:", err);
                 alert("Something went wrong!");
             }
         };
 
-        fetchProduct(); // ✅ CALL the function here
-    }, [CategoryTerm]);
+        fetchProduct();
+    }, [CategoryTerm, search]);
+    // useEffect(() => {
+    //     const fetchProduct = async () => {
+    //         try {
+    //             const url = CategoryTerm
+    //                 ? `http://localhost:8000/api/product/allProduct?category=${CategoryTerm}`
+    //                 : `http://localhost:8000/api/product/allProduct`;
+    //             const res = await axios.get(url, { withCredentials: true });
+
+    //             setProducts(res.data.product); // make sure your backend returns { product: [...] }
+    //         } catch (err) {
+    //             console.error("Error fetching products:", err);
+    //             alert("Something went wrong!");
+    //         }
+    //     };
+
+    //     fetchProduct(); // CALL the function 
+    // }, [CategoryTerm]);
 
     if (!Array.isArray(products) || products.length === 0) {
         return (
             <h3 className="text-center mt-5">
                 {CategoryTerm
-                    ? "No product found for your category."
+                    ? "No product found for your category or search."
 
                     : "No product available. Please create one!"}
             </h3>

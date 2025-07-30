@@ -1,8 +1,6 @@
-// import React from "react";
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import loginImage from '../Assets/p2.jpg';
 
 
 export default function SignUp() {
@@ -68,9 +66,6 @@ export default function SignUp() {
                                 <br></br>
                                 <button type="submit" className="btn btn-danger w-100">Sign Up</button>
                             </form>
-                            {/* <p className="mt-3 text-center">
-                                Already have an account? <a href="/login" className="text-decoration-none">Go to the Login</a>
-                            </p> */}
                         </div>
                     </div>
                 </div>

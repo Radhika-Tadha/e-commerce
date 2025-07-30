@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CreateProduct from "../Admin/Pages/AddProduct"; // or your Product Edit form component
+import CreateProduct from "../Admin/Pages/AddProduct"; 
 
 export default function ProductEditWrapper() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function ProductEditWrapper() {
 
   useEffect(() => {
     if (!product) {
-      // Fetch product from backend using ID if not available in state
+      // Fetch product from backend using ID 
       axios
         .get(`http://localhost:8000/api/product/${id}`)
         .then((res) => setProduct(res.data.product))
