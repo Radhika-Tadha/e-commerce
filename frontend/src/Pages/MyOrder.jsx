@@ -22,7 +22,7 @@ export default function MyOrders() {
     fetchOrders();
   }, []);
 
-  
+
 
   return (
     <div className="container my-3">
@@ -52,8 +52,18 @@ export default function MyOrders() {
                   <h6 className="card-text">
                     <small className="text-muted">
                       Ordered At: {new Date(order.createdAt).toLocaleString()}
-                      <h6 className="card-text mb-2">Status: {order.status}</h6>
-
+                      <h6>
+                        <span
+                          className={`badge ${order.status === "Accepted"
+                              ? "bg-success"
+                              : order.status === "Rejected"
+                                ? "bg-danger"
+                                : "bg-warning text-dark"
+                            }`}
+                        >
+                          {order.status || "Pending"}
+                        </span>
+                      </h6>
                     </small>
                   </h6>
                 </div>

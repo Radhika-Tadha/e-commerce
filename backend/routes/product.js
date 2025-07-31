@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/auth");
 const upload = require("../middlewares/multer");
+const isAdmin = require('../middlewares/isAdmin');
 
 const {
   insertProduct,
@@ -15,9 +16,9 @@ const {
 
 // Routes
 router.get('/allProduct', getProducts);
-router.post("/insert", authMiddleware, upload.single("image"), insertProduct);
-router.put("/update/:id", upload.single("image"), updateProduct);
-router.delete("/:id", authMiddleware, deleteProduct);
+router.post("/insert", authMiddleware, isAdmin, upload.single("image"), insertProduct);
+router.put("/update/:id", isAdmin, upload.single("image"), updateProduct);
+router.delete("/:id", isAdmin, authMiddleware, deleteProduct);
 // router.get("/allproduct", getAllProducts);
 router.get("/:id", getProductById);
 // router.get("/", searchByCategory);

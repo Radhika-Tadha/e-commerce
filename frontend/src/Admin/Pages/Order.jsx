@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function AdminOrders() {
+export default function AdminOrders({ order, refreshOrders }) {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -12,19 +12,20 @@ export default function AdminOrders() {
       .catch(err => console.error("Error fetching orders:", err));
   }, []);
 
-  const updateOrderStatus = async (orderId, status) => {
-  try {
-    await axios.put(`http://localhost:8000/api/order/${orderId}`, { status }, {
-      withCredentials: true,
-    });
-    alert(`Order ${status === "Delivered" ? "Approved" : "Rejected"}!`);
-    // Refresh orders or update UI accordingly
-  } catch (err) {
-    console.error("Failed to update order status:", err);
-    alert("Failed to update order status.");
-  }
-};
-
+  const updateOrderStatus = async (id, status) => {
+    try {
+      await axios.put(
+        `http://localhost:8000/api/order/${id}`,
+        { status },
+        { withCredentials: true }
+      );
+      alert(`Order ${status === "Accepted" ? "Accepted" : "Rejected"}!`);
+      refreshOrders(); // Refetch updated list
+    } catch (err) {
+      console.error("Failed to update order status:", err);
+      alert("Failed to update order status.");
+    }
+  };
 
 
   return (
@@ -62,35 +63,24 @@ export default function AdminOrders() {
                   <td>{order.address}</td>
                   <td>{order.quantity * order.price}</td>
                   <td>
-                    {order.status === "Pending" ? (
-                      <div className="d-flex flex-column gap-2">
-                        <button
-                          className="btn btn-sm btn-success"
-                          onClick={() => updateOrderStatus(order._id, "Shipped")}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => updateOrderStatus(order._id, "Rejected")}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="fw-semibold">
-                        {order.status === "Shipped" && (
-                          <span className="text-primary">Approved</span>
-                        )}
-                        {order.status === "Rejected" && (
-                          <span className="text-danger">Rejected</span>
-                        )}
-                        {order.status === "Delivered" && (
-                          <span className="text-success">Delivered</span>
-                        )}
-                      </div>
-                    )}
+                    <div className="d-flex flex-column gap-2">
+                      <button
+                        className={`btn btn-sm ${order.status === "Accepted" ? "btn-success" : "btn-outline-success"}`}
+                        disabled={order.status === "Rejected"}
+                        onClick={() => updateOrderStatus(order._id, "Accepted")}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className={`btn btn-sm ${order.status === "Rejected" ? "btn-danger" : "btn-outline-danger"}`}
+                        disabled={order.status === "Accepted"}
+                        onClick={() => updateOrderStatus(order._id, "Rejected")}
+                      >
+                        Reject
+                      </button>
+                    </div>
                   </td>
+
 
                 </tr>
               ))}

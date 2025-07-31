@@ -35,7 +35,7 @@ export default function AboutUs() {
           </ul>
 
           <p className="text-muted mt-3">
-            <em>– The DreamShop Team</em>
+            <em>- The DreamShop Team</em>
           </p>
             </div>
         </div>

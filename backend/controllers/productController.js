@@ -5,7 +5,7 @@ const product = require("../models/product");
 
 exports.insertProduct = async (req, res) => {
   try {
-    const { role } = req.user;
+    const { role } = req.user.role;
 
     if (!req.user || role !== "admin") {
       return res.status(403).json({ message: "Unauthorized. Only admins can add products." });

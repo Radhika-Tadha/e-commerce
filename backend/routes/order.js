@@ -10,7 +10,7 @@ router.get('/my-orders', authMiddleware, orderController.getMyOrders);
 
 router.get('/all', authMiddleware, isAdmin, orderController.getAllOrders);
 
-router.put("/update-status/:id", authMiddleware, orderController.updateOrderStatus);
+router.put("/:id", authMiddleware, isAdmin, orderController.updateOrderStatus);
 
 
 module.exports = router;

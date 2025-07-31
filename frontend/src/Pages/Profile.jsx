@@ -1,103 +1,70 @@
-import React from 'react';
-import Default from '../Assets/default.png';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-
-
+import { FaUser, FaEnvelope, FaUserShield } from "react-icons/fa";
 
 export default function Profile() {
-    const navigate = useNavigate();
     const [user, setUser] = useState(null);
-
-
+    const [orders, setOrders] = useState(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await axios.get("http://localhost:8000/api/auth/me", {
-                    headers: {
-                        withCredentials: true,
-                    },
-                });
-                console.log("Fetched user:", res.data.user);
+  const fetchData = async () => {
+    try {
+      const [userRes, ordersRes] = await Promise.all([
+        axios.get("http://localhost:8000/api/user/getUser", {
+          withCredentials: true,
+        }),
+        // axios.get("http://localhost:8000/api/order/my-orders", {
+        //   withCredentials: true,
+        // }),
+      ]);
 
-                setUser(res.data.user);
-                // navigate("/profile");
-            } catch (err) {
-                console.error("Fetch user failed", err.response?.data || err.message);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
-    if (!user) {
-        return <h3 className="text-center mt-5">Please login to view profile.</h3>;
+      setUser(userRes.data.user);
+      setOrders(ordersRes.data.orders); // assuming orders response shape
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
     }
-    const imageUrl = user.image
-        ? `http://localhost:8000/uploads/${user.image}` 
-        : { Default };
+  };
+
+  fetchData();
+}, []);
+
+
+    if (!user)
+        return <p className="text-center mt-5 text-muted">Loading profile...</p>;
 
     return (
-        <div className="container vh-100 d-flex align-items-center justify-content-center mt-1">
-            <div className="row shadow-lg rounded-end" style={{ width: "100%", maxWidth: "900px", height: "500px" }}>
-                {/* LEFT SIDE - IMAGE */}
-                <div className="col-md-4 d-none d-md-block p-5" style={{ background: "linear-gradient(to right,#d5967e, #a64528)" }}>
+        <div className="container mt-5 d-flex justify-content-center">
+            <div className="card shadow p-4" style={{ maxWidth: "500px", width: "100%" }}>
+                <div className="text-center">
                     <img
-                        src={imageUrl}
-                        alt="Profile"
-                        className="rounded-circle"
-                        width="180"
-                        height="180"
-                        style={{ objectFit: "cover" }}
-                    /><br></br><br></br>
-                    <h3 className="text-center mt-4" style={{ color: "white" }}>{user.name}</h3>
-                    <br></br>
-                    <strong style={{ color: "white" }} onClick={() => navigate("/edit-profile")}><i className="bi bi-pencil-square fs-5"></i>
-                    </strong>
-
-
+                        src={`https://ui-avatars.com/api/?name=${user.name}&background=0F385C&color=fff&size=128`}
+                        alt="avatar"
+                        className="rounded-circle mb-3"
+                        style={{ width: "100px", height: "100px" }}
+                    />
+                    <h4 className="mb-0">{user.name}</h4>
+                    <p className="text-muted">{user.role || "User"}</p>
                 </div>
-
-                {/* RIGHT SIDE - FORM */}<br></br>
-                <div className="col-md-8 p-5 bg-white rounded-end "><br></br>
-                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none" style={{ color: "#BB5A3A" }}>Information</h3>
-                    <div className='row'>
-                        <div className="col-sm-6 text-start text-muted border-0 border-bottom rounded-0 shadow-none">
-                            <p className="mt-5 mb-0"><strong>Email: </strong>{user.email}</p>
-                        </div><br></br>
-
-                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p className="mt-5 mb-0"><strong>Mobile No.:</strong>{user.phone || "Not Provided"}</p>
-                        </div><br></br>
-
-                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p className="mt-5 mb-0"><strong>Date of Birth:</strong>{user.dob || "Not Provided"}</p>
-                        </div><br></br>
-
-
-                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p className="mt-5 mb-0"><strong>Bio :</strong>{user.bio || "Not Provided"}</p>
-                        </div><br></br>
-
-                        <ul className="mt-5 mb-0 list-unstyled d-flex gap-3">
-                            <li>
-                                <Link target='_self'><i className="bi bi-facebook fs-4 text-primary"></i></Link>
-                            </li>
-                            <li>
-                                <Link target='_self'><i className="bi bi-instagram fs-4 text-danger"></i></Link>
-                            </li>
-                            <li>
-                                <Link target='_self'><i className="bi bi-linkedin fs-4 text-info"></i></Link >
-                            </li>
-                        </ul>
-                    </div>
+                <hr />
+                <div className="mt-3">
+                    <p>
+                        <FaUser className="me-2 text-primary" />
+                        <strong>Name:</strong> {user.name}
+                    </p>
+                    <p>
+                        <FaEnvelope className="me-2 text-primary" />
+                        <strong>Email:</strong> {user.email}
+                    </p>
+                    {/* <p>
+                        <FaEnvelope className="me-2 text-primary" />
+                        <strong>Address:</strong> {orders.address}
+                    </p> */}
+                    <p>
+                        <FaUserShield className="me-2 text-primary" />
+                        <strong>Role:</strong> {user.role || "User"}
+                    </p>
                 </div>
             </div>
         </div>
-
     );
 }
-

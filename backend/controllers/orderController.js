@@ -45,7 +45,7 @@ exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
       .populate("userId", "name email")
-      .populate("productId", "name image price");
+      .populate("productId", "name image price p_detail");
 
     res.json(orders);
   } catch (err) {
@@ -55,16 +55,16 @@ exports.getAllOrders = async (req, res) => {
 
 exports.updateOrderStatus = async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(
+    const updated = await Order.findByIdAndUpdate(
       req.params.id,
       { status: req.body.status },
       { new: true }
-    ).populate("userId");
+    );
+    console.log("Updating order:", id);
 
-    // Optional: Notify user (e.g., via email, toast, or notification DB)
-    res.json({ message: "Status updated", order });
+    res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Failed to update status" });
-  }
+    res.status(500).json({ message: "Error updating order status" });
+  };
 };
 

@@ -66,6 +66,19 @@ exports.login = async (req, res) => {
     }
 };
 
+// GET: Get Current User (used in profile page)
+exports.me = async (req, res) => {
+    try {
+        const user = await User.findById(req.user).select("-password");
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        return res.json({ user });
+    } catch (err) {
+        console.error("Fetch user failed:", err);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
 exports.logout = (req, res) => {
     res.clearCookie("token");
     return res.json("Logout successful");

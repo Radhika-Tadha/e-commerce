@@ -21,8 +21,9 @@ app.use("/uploads", express.static("uploads"));
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const orderRoutes = require("./routes/order");
-const adminRoutes = require("./routes/admin"); 
+const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
+
 
 //  Test Route
 app.get('/api/test', (req, res) => {
@@ -33,9 +34,13 @@ app.get('/api/test', (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/order", orderRoutes);
-app.use("/api/admin", adminRoutes); 
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 
+app.use((req, res, next) => {
+    console.log("404 - Route not found:", req.method, req.originalUrl);
+    res.status(404).json({ message: "Route not found" });
+});
 //  Global Error Handler
 app.use((err, req, res, next) => {
     console.error("Global error:", err);
