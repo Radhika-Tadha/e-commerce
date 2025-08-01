@@ -27,6 +27,8 @@ import CheckoutPage from './Pages/CheckoutPage';
 import MyOrders from './Pages/MyOrder';
 import Profile from './Pages/Profile';
 import AboutUs from './Pages/AboutUs';
+import SendEmailForm from "./Pages/SendEmailForm";
+
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -95,6 +97,7 @@ function App() {
             <Route path="/MyOrders" element={isLoggin ? <MyOrders /> : <Navigate to="/login" />} />
             <Route path="/Profile" element={isLoggin ? <Profile /> : <Navigate to="/login" />} />
             <Route path="/AboutUs" element={isLoggin ? <AboutUs /> : <Navigate to="/login" />} />
+            <Route path="/send-email" element={<SendEmailForm />} />
           </Routes>
         </main>
         <Footer />

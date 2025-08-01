@@ -19,16 +19,16 @@ export default function Home() {
         <>
             <div className="Hero-section d-flex justify-content-between align-items-center"
                 style={{ backgroundColor: "#eaf7ff", padding: "40px" }}>
-                <div>
+                <div className="m-5 p-5">
                     <h1>This is Home page</h1>
                     <h2>{user ? `Welcome, ${user.name}` : "Loading user..."}</h2>
                 </div>
 
-                <div className="img">
+                <div className="img mx-2 p-2">
                     <img
                         src={HeroImg}
                         alt="Image"
-                        className="img" style={{ width: "350px", height: "auto" }}></img>
+                        className="img img-fluid" style={{ width: "350px", height: "auto" }}></img>
                 </div>
             </div>
             {/* Category Section */}

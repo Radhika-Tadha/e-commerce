@@ -43,7 +43,7 @@ export default function Navbar({ isLoggin, setIsLoggin, user, setUser }) {
         <>
             <nav className="navbar navbar-expand-lg p-2 d-flex" style={{ backgroundColor: "white" }}>
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/home">AshionWear</Link>
+                    <Link className="navbar-brand" to="/home">DreamShop</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -119,7 +119,7 @@ export default function Navbar({ isLoggin, setIsLoggin, user, setUser }) {
             {/* menu navbar */}
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/home">AshionWear</Link>
+                    <Link className="navbar-brand" to="/home">DreamShop</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>

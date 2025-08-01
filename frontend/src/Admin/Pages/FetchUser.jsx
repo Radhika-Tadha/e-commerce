@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+// import { FaUser, FaEnvelope, FaUserShield } from "react-icons/fa";
 
 export default function FetchUser() {
   const [users, setUsers] = useState([]);
-  
+  // const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await axios.get("http://localhost:8000/api/user/all", {
           withCredentials: true,
         });
-        setUsers(res.data.users); 
+        setUsers(res.data.users);
       } catch (err) {
         console.error("Failed to fetch users:", err);
       }
@@ -18,6 +20,7 @@ export default function FetchUser() {
 
     fetchUsers();
   }, []);
+
 
   return (
     <div className="container mt-4">
@@ -31,28 +34,32 @@ export default function FetchUser() {
               <th>Profile</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Address</th>
+              {/* <th>Address</th> */}
               <th>Role</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((u, index) => (
-              <tr key={index}>
-                <td>
-                  <img
-                    src={`http://localhost:8000/uploads/${u.image}`}
-                    alt={u.name}
-                    width="40"
-                    height="40"
-                    style={{ borderRadius: "50%", objectFit: "cover" }}
-                  />
-                </td>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.address}</td>
-                <td>{u.role || "user"}</td>
-              </tr>
-            ))}
+            {users.map((user, index) => {
+              // const order = orders.find(o => o.userId?.toString() === user._id?.toString());
+              return (
+                <tr key={index}>
+                  <td>
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${user.name}&background=0F385C&color=fff&size=128`}
+                      alt={user.image}
+                      width="40"
+                      height="40"
+                      style={{ borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  </td>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  {/* <td>{order?.address || "No address"}</td> */}
+                  <td>{user.role || "user"}</td>
+                </tr>
+              );
+            })}
+
           </tbody>
         </table>
       )}

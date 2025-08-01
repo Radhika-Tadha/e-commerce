@@ -15,10 +15,10 @@ module.exports = async function (req, res, next) {
     if (!user) {
       return res.status(401).json({ message: "Unauthorized: User not found" });
     }
-
     req.user = user._id;        // use this in controllers (like req.user)
     req.role = user.role;       // if need admin check later
     // req.user = decoded._id;
+    req.user = user;
 
     next();
   } catch (err) {

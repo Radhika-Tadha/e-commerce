@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
-
 dotenv.config();
 const app = express();
 
@@ -23,6 +22,7 @@ const productRoutes = require("./routes/product");
 const orderRoutes = require("./routes/order");
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
+const emailRoutes = require("./routes/email");
 
 
 //  Test Route
@@ -36,6 +36,7 @@ app.use("/api/product", productRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api", emailRoutes);
 
 app.use((req, res, next) => {
     console.log("404 - Route not found:", req.method, req.originalUrl);

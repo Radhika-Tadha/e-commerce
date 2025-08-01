@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { sendEmail } = require('./emailController');
 
 exports.signup = async (req, res) => {
     try {
@@ -20,6 +21,20 @@ exports.signup = async (req, res) => {
             email,
             password: hashedPassword,
         });
+
+        // Send welcome email using Ethereal
+        const result = await sendEmail({
+            to: email,
+            subject: "Welcome to DreamShop ",
+            message: `Hi ${name},<br/>Thank you for signing up to our app!`,
+        });
+
+        if (!result.success) {
+            return res.status(500).json({
+                message: "Signup failed while sending email",
+                error: result.error,
+            });
+        }
 
         await newUser.save();
         res.status(200).json({ message: "Successfully signed up" });

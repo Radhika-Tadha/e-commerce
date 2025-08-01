@@ -7,6 +7,9 @@ export default function SignUp() {
     const navigator = useNavigate();
     const [form, setForm] = useState({ name: "", email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState("");
+
 
     const handleChange = (e) => {
         setForm({
@@ -18,14 +21,19 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
+            if (!form.name || !form.email || !form.password) return alert("All fields are required");
+            setLoading(true);
             const res = await axios.post("http://localhost:8000/api/auth/signup", form,);
             alert(res.data.message);
             navigator("/Login");
+            setMsg(res.data.message);
 
         } catch (err) {
+            setMsg(err.response?.data?.message || "Signup failed");
             console.log("signup faild", err);
             alert(err.response?.data?.message || "Signup failed");
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -66,6 +74,7 @@ export default function SignUp() {
                                 <br></br>
                                 <button type="submit" className="btn btn-danger w-100">Sign Up</button>
                             </form>
+                            {msg && <p className="mt-3 alert alert-info">{msg}</p>}
                         </div>
                     </div>
                 </div>

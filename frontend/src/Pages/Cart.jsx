@@ -31,6 +31,7 @@ export default function Cart() {
                                 <img
                                     src={`http://localhost:8000/uploads/${item.image}`}
                                     alt={item.name}
+                                    className="img-fluid"
                                     style={{ width: "100%", height: "auto", objectFit: "cover" }}
                                 />
                             </div>

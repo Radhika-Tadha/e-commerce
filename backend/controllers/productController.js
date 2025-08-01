@@ -5,10 +5,15 @@ const product = require("../models/product");
 
 exports.insertProduct = async (req, res) => {
   try {
-    const { role } = req.user.role;
+    const role = req.user.role;
 
-    if (!req.user || role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized. Only admins can add products." });
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized: No user data" });
+    }
+
+    if (req.user.role !== "admin") {
+      console.log("Role is:", req.user.role);
+      return res.status(403).json({ message: "Only admins can add products." });
     }
 
     const { name, price, p_detail, size, category } = req.body;

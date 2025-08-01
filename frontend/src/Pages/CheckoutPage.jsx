@@ -38,7 +38,7 @@ export default function CheckoutPage() {
 
       localStorage.removeItem("buyNow");
       alert("Order placed successfully!");
-      navigate("/thank-you");
+      navigate("/MyOrders");
     } catch (err) {
       console.error("Order failed", err.response?.data || err.message);
       alert("Failed to place order.");

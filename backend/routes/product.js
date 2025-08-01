@@ -15,8 +15,8 @@ const {
 } = require("../controllers/productController");
 
 // Routes
-router.get('/allProduct', getProducts);
 router.post("/insert", authMiddleware, isAdmin, upload.single("image"), insertProduct);
+router.get('/allProduct', getProducts);
 router.put("/update/:id", isAdmin, upload.single("image"), updateProduct);
 router.delete("/:id", isAdmin, authMiddleware, deleteProduct);
 // router.get("/allproduct", getAllProducts);
