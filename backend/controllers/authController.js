@@ -21,22 +21,24 @@ exports.signup = async (req, res) => {
             email,
             password: hashedPassword,
         });
+        await newUser.save();
+        console.log("User saved successfully:", newUser._id);
 
         // Send welcome email using Ethereal
         const result = await sendEmail({
+            from: process.env.GMAIL_USER,
             to: email,
-            subject: "Welcome to DreamShop ",
-            message: `Hi ${name},<br/>Thank you for signing up to our app!`,
+            subject: "Welcome to DreamShop",
+            message: `Hi ${name},<br/>Thank you for signing up to our app!`
         });
 
+        console.log("Email result:", result);
+
         if (!result.success) {
-            return res.status(500).json({
-                message: "Signup failed while sending email",
-                error: result.error,
-            });
+            console.warn("Email failed:", result.error);
+            return res.status(200).json({ message: "Signed up but email not sent" });
         }
 
-        await newUser.save();
         res.status(200).json({ message: "Successfully signed up" });
     } catch (err) {
         console.error("Signup failed", err);

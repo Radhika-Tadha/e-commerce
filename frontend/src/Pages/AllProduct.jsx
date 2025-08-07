@@ -67,6 +67,7 @@ export default function AllProducts({ limit }) {
             <div className="container">
                 <div className="row d-flex justify-content-center gap-4 w-100 px-3">
                     {products
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                         .slice(0, limit || products.length)
                         .map((product) => (
                             <div

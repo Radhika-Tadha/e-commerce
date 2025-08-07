@@ -1,41 +1,25 @@
 const nodemailer = require("nodemailer");
 
-exports.sendEmail = async ({ to, subject, message }) => {
-  try {
-    // 1. Create test account for Ethereal
-    const testAccount = await nodemailer.createTestAccount();
+exports.sendEmail = async ({ from, to, subject, message }) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS // App Password from Google
+            }
+        });
 
-    // 2. Create transporter using Ethereal
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
+        await transporter.sendMail({
+            from,
+            to,
+            subject,
+            html: message
+        });
 
-    // 3. Set email options
-    const mailOptions = {
-      from: `"DreamShop" <no-reply@dreamshop.com>`,
-      to,
-      subject,
-      html: `<p>${message}</p>`,
-    };
-
-    // 4. Send email
-    const info = await transporter.sendMail(mailOptions);
-
-    console.log("Email sent:", info.messageId);
-    console.log("Preview URL:", nodemailer.getTestMessageUrl(info));
-
-    return {
-      success: true,
-      previewUrl: nodemailer.getTestMessageUrl(info), // show this in frontend for testing
-    };
-
-  } catch (err) {
-    console.error("Email error:", err);
-    return { success: false, error: err.message };
-  }
+        return { success: true };
+    } catch (error) {
+        console.error("Email sending failed:", error);
+        return { success: false, error: error.message };
+    }
 };

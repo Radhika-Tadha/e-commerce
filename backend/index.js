@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 dotenv.config();
 const app = express();
+// const { sendEmail } = require("./controllers/emailController");
 
 //  Middleware
 app.use(cors({
@@ -29,6 +30,7 @@ const emailRoutes = require("./routes/email");
 app.get('/api/test', (req, res) => {
     res.send('Backend working');
 });
+
 
 //  API Routes
 app.use("/api/user", userRoutes);
